@@ -54,3 +54,19 @@ def classification_cases() -> list[tuple[str, str, dict]]:
         ("elevated", "Elevated Thermal Condition", elevated_features()),
         ("high-risk", "High-risk Thermal Condition", high_risk_features()),
     ]
+
+
+def extra_cases() -> list[tuple[str, str, dict]]:
+    """Extra hand-written packets. Each valid one trips at most one band."""
+
+    return [
+        ("cool_room", "Cool Room", load_sample("cool_room.json")),
+        ("near_normal", "Just Below Elevated", load_sample("near_normal.json")),
+        ("elevated_by_rate", "Elevated By Rate Only", load_sample("elevated_by_rate.json")),
+        ("elevated_by_delta", "Elevated By Delta T Only", load_sample("elevated_by_delta.json")),
+        ("high_risk_by_rate", "High-risk By Rate Only", load_sample("high_risk_by_rate.json")),
+        ("high_risk_by_delta", "High-risk By Delta T Only", load_sample("high_risk_by_delta.json")),
+        ("missing_timestamp", "Missing Timestamp", load_sample("missing_timestamp.json")),
+        ("extra_field", "Unexpected Extra Field", load_sample("extra_field.json")),
+        ("out_of_range", "Temperature Out Of Range", load_sample("out_of_range.json")),
+    ]

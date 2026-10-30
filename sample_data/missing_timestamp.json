@@ -1,0 +1,9 @@
+{
+  "max_temp": 40.0,
+  "mean_temp": 32.0,
+  "hotspot_location": "centre",
+  "temp_rate_of_change": 0.5,
+  "ambient_temp": 24.0,
+  "delta_t": 8.0,
+  "data_quality": "valid"
+}

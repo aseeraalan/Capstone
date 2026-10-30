@@ -7,6 +7,7 @@ from thermosense_c.samples import (
     elevated_features,
     high_risk_features,
     invalid_features,
+    load_sample,
     normal_features,
     stale_features,
 )
@@ -93,6 +94,26 @@ def test_stale_data_quality_is_not_classified():
     assert report.valid is False
     assert "risk_category" not in dumped
     assert "stale" in (report.detail or "")
+
+
+def test_extra_packets_follow_the_preliminary_bands():
+    expected = {
+        "cool_room.json": "normal",
+        "near_normal.json": "normal",
+        "elevated_by_rate.json": "elevated",
+        "elevated_by_delta.json": "elevated",
+        "high_risk_by_rate.json": "high-risk",
+        "high_risk_by_delta.json": "high-risk",
+    }
+    for filename, category in expected.items():
+        report = _mock(load_sample(filename))
+        assert report.llm_status == AssessmentStatus.OK
+        assert report.risk_category == category
+
+    for filename in ("missing_timestamp.json", "extra_field.json", "out_of_range.json"):
+        report = _mock(load_sample(filename))
+        assert report.llm_status == AssessmentStatus.INPUT_INVALID
+        assert report.risk_category is None
 
 
 def test_unknown_mode_is_a_programming_error():

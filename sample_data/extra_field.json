@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-10-23T11:16:00-04:00",
+  "max_temp": 36.0,
+  "mean_temp": 30.0,
+  "hotspot_location": "centre",
+  "temp_rate_of_change": 0.3,
+  "ambient_temp": 24.0,
+  "delta_t": 6.0,
+  "data_quality": "valid",
+  "sensor_name": "not-a-real-reading"
+}

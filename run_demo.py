@@ -17,7 +17,7 @@ from pathlib import Path
 from thermosense_c import AssessmentStatus, interpret
 from thermosense_c.llm_client import DEFAULT_MODEL, DEFAULT_OLLAMA_URL, DEFAULT_TIMEOUT_S
 from thermosense_c.local_checks import run_failure_checks
-from thermosense_c.samples import classification_cases
+from thermosense_c.samples import classification_cases, extra_cases
 from thermosense_c.schemas import InterfaceReport, RiskAssessment, SensorFeatures
 
 _TITLES = {
@@ -27,6 +27,15 @@ _TITLES = {
     "high_risk": "High-risk Thermal Condition",
     "invalid": "Invalid Data Quality",
     "stale": "Stale Data Quality",
+    "cool_room": "Cool Room",
+    "near_normal": "Just Below Elevated",
+    "elevated_by_rate": "Elevated By Rate Only",
+    "elevated_by_delta": "Elevated By Delta T Only",
+    "high_risk_by_rate": "High-risk By Rate Only",
+    "high_risk_by_delta": "High-risk By Delta T Only",
+    "missing_timestamp": "Missing Timestamp",
+    "extra_field": "Unexpected Extra Field",
+    "out_of_range": "Temperature Out Of Range",
 }
 
 
@@ -38,9 +47,26 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mode", required=True, choices=["mock", "ollama", "failure-check", "schema"])
     parser.add_argument(
         "--case",
-        choices=["normal", "elevated", "high-risk", "invalid", "stale", "all"],
+        choices=[
+            "normal",
+            "elevated",
+            "high-risk",
+            "invalid",
+            "stale",
+            "all",
+            "more",
+            "cool_room",
+            "near_normal",
+            "elevated_by_rate",
+            "elevated_by_delta",
+            "high_risk_by_rate",
+            "high_risk_by_delta",
+            "missing_timestamp",
+            "extra_field",
+            "out_of_range",
+        ],
         default="all",
-        help="Built-in simulated case. Ignored when --input is set.",
+        help="Built-in simulated case. 'more' runs the extra packets. Ignored when --input is set.",
     )
     parser.add_argument(
         "--input",
@@ -97,8 +123,13 @@ def _cases(case: str, input_path: str | None) -> list[tuple[str, object]]:
         payload = json.loads(Path(input_path).read_text(encoding="utf-8"))
         return [(_title_for(Path(input_path).stem), payload)]
     selected = {name: (title, features) for name, title, features in classification_cases()}
+    extras = {name: (title, features) for name, title, features in extra_cases()}
     if case == "all":
         return [(title, features) for title, features in selected.values()]
+    if case == "more":
+        return [(title, features) for title, features in extras.values()]
+    if case in extras:
+        return [extras[case]]
     if case in ("invalid", "stale"):
         from thermosense_c.samples import invalid_features, stale_features
 
