@@ -1,0 +1,5 @@
+# Student C laptop prototype. No cloud LLM packages.
+# Pydantic checks Student B's features and the model JSON.
+# Pytest runs the tests that do not need Ollama.
+pydantic>=2.7,<3
+pytest>=8,<9

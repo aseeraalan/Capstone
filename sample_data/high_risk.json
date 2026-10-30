@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-10-23T11:02:00-04:00",
+  "max_temp": 85.0,
+  "mean_temp": 48.0,
+  "hotspot_location": "upper-right",
+  "temp_rate_of_change": 6.0,
+  "ambient_temp": 25.0,
+  "delta_t": 60.0,
+  "data_quality": "valid"
+}
